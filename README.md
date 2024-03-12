@@ -1,0 +1,2 @@
+# OceanShipBeidouMS
+基于北斗短报文的远洋船舶信息管理系统
