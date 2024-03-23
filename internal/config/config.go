@@ -23,13 +23,13 @@ type config struct {
 		StartOffset    int      `yaml:"startOffset"`
 	} `yaml:"kafka"`
 	Mysql struct {
-		Port     string `yaml:"port"`
+		TCP      string `yaml:"tcp"`
 		User     string `yaml:"user"`
 		Password string `yaml:"password"`
 		Database string `yaml:"database"`
 	} `yaml:"mysql"`
 	Redis struct {
-		Port string `yaml:"port"`
+		TCP string `yaml:"tcp"`
 	} `yaml:"redis"`
 }
 

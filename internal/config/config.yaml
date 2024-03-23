@@ -11,12 +11,12 @@ kafka:
   startOffset: -2 #从最开始开始读
 
 mysql:
-  port: "3306"
+  tcp: "127.0.0.1:3306"
   user: "user"
   password: "password"
   database: "osdbms"
 
 
 redis:
-  port: "6379"
+  tcp: "127.0.0.1:6379"
 
