@@ -9,23 +9,28 @@ func init() {
 	initConfigByViper()
 }
 
-// 使用网站(https://old.printlove.cn/tools/yaml2go)可以直接将yaml文件转换为go struct
+// 使用网站(https://zhwt.github.io/yaml-to-go/)可以直接将yaml文件转换为go struct
 type config struct {
-	App   App   `yaml:"app"`
-	Kafka Kafka `yaml:"kafka"`
-}
-
-type App struct {
-	Port int `yaml:"port"`
-}
-
-type Kafka struct {
-	Addr           []string `yaml:"addr"`
-	WriteTimeout   int      `yaml:"writeTimeout"`
-	ReadTimeout    int      `yaml:"readTimeout"`
-	RetryCount     int      `yaml:"retryCount"`
-	CommitInterval int      `yaml:"commitInterval"`
-	StartOffset    int      `yaml:"startOffset"`
+	App struct {
+		Port int `yaml:"port"`
+	} `yaml:"app"`
+	Kafka struct {
+		Addr           []string `yaml:"addr"`
+		WriteTimeout   int      `yaml:"writeTimeout"`
+		ReadTimeout    int      `yaml:"readTimeout"`
+		RetryCount     int      `yaml:"retryCount"`
+		CommitInterval int      `yaml:"commitInterval"`
+		StartOffset    int      `yaml:"startOffset"`
+	} `yaml:"kafka"`
+	Mysql struct {
+		Port     string `yaml:"port"`
+		User     string `yaml:"user"`
+		Password string `yaml:"password"`
+		Database string `yaml:"database"`
+	} `yaml:"mysql"`
+	Redis struct {
+		Port string `yaml:"port"`
+	} `yaml:"redis"`
 }
 
 // 全局唯一的config结构体变量

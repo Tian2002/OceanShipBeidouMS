@@ -9,3 +9,14 @@ kafka:
   retryCount: 3
   commitInterval: 1
   startOffset: -2 #从最开始开始读
+
+mysql:
+  port: "3306"
+  user: "user"
+  password: "password"
+  database: "osdbms"
+
+
+redis:
+  port: "6379"
+
