@@ -26,8 +26,8 @@ func setEnv() {
 	hlog.Infof("Current workdir directory:", exePath)
 	//设置环境变量
 	os.Setenv(common.Workdir, exePath)
-	////本地测试时使用，主要是解决相对路径的问题
-	//os.Setenv(common.Workdir, common.TestWorkdir)
+	//本地测试时使用，主要是解决相对路径的问题
+	os.Setenv(common.Workdir, common.TestWorkdir)
 }
 
 // 使用网站(https://zhwt.github.io/yaml-to-go/)可以直接将yaml文件转换为go struct
