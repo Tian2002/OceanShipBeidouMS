@@ -12,7 +12,7 @@ import (
 func main() {
 	g := gen.NewGenerator(gen.Config{
 		//  设置输出路径
-		OutPath: "../query",
+		OutPath: "./biz/repository/mysql/query",
 		Mode:    gen.WithDefaultQuery | gen.WithQueryInterface, // 选择生成模式
 	})
 	//  建立数据库连接
@@ -29,7 +29,7 @@ func main() {
 
 func conn() *gorm.DB {
 	//dsn := "root:123456@tcp(127.0.0.1:3306)/student?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn := fmt.Sprintf("%s:%stcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.GetConfig().Mysql.User, config.GetConfig().Mysql.Password, config.GetConfig().Mysql.TCP, config.GetConfig().Mysql.Database)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.GetConfig().Mysql.User, config.GetConfig().Mysql.Password, config.GetConfig().Mysql.TCP, config.GetConfig().Mysql.Database)
 	db, err := gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		hlog.Fatalf("connect mysql error:[%#v]\n", err)
