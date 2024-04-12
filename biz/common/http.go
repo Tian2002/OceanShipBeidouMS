@@ -6,4 +6,7 @@ func init() {
 
 var ErrMap map[int]string
 
-const ParamError = 1001
+const (
+	Error      = 10000
+	ParamError = 10001
+)
