@@ -29,6 +29,8 @@ func newBeiDouCard(db *gorm.DB, opts ...gen.DOOption) beiDouCard {
 	_beiDouCard.ALL = field.NewAsterisk(tableName)
 	_beiDouCard.ID = field.NewInt32(tableName, "id")
 	_beiDouCard.Number = field.NewString(tableName, "number")
+	_beiDouCard.Type = field.NewBool(tableName, "type")
+	_beiDouCard.Station = field.NewInt32(tableName, "station")
 	_beiDouCard.ShipID = field.NewInt32(tableName, "ship_id")
 	_beiDouCard.CreatedAt = field.NewTime(tableName, "created_at")
 	_beiDouCard.UpdatedAt = field.NewTime(tableName, "updated_at")
@@ -45,6 +47,8 @@ type beiDouCard struct {
 	ALL       field.Asterisk
 	ID        field.Int32
 	Number    field.String
+	Type      field.Bool
+	Station   field.Int32
 	ShipID    field.Int32
 	CreatedAt field.Time
 	UpdatedAt field.Time
@@ -67,6 +71,8 @@ func (b *beiDouCard) updateTableName(table string) *beiDouCard {
 	b.ALL = field.NewAsterisk(table)
 	b.ID = field.NewInt32(table, "id")
 	b.Number = field.NewString(table, "number")
+	b.Type = field.NewBool(table, "type")
+	b.Station = field.NewInt32(table, "station")
 	b.ShipID = field.NewInt32(table, "ship_id")
 	b.CreatedAt = field.NewTime(table, "created_at")
 	b.UpdatedAt = field.NewTime(table, "updated_at")
@@ -97,9 +103,11 @@ func (b *beiDouCard) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (b *beiDouCard) fillFieldMap() {
-	b.fieldMap = make(map[string]field.Expr, 6)
+	b.fieldMap = make(map[string]field.Expr, 8)
 	b.fieldMap["id"] = b.ID
 	b.fieldMap["number"] = b.Number
+	b.fieldMap["type"] = b.Type
+	b.fieldMap["station"] = b.Station
 	b.fieldMap["ship_id"] = b.ShipID
 	b.fieldMap["created_at"] = b.CreatedAt
 	b.fieldMap["updated_at"] = b.UpdatedAt

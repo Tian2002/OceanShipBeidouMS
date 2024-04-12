@@ -18,7 +18,6 @@ func main() {
 	//  建立数据库连接
 	db := conn()
 	g.UseDB(db) // 选择数据库连接
-
 	g.ApplyBasic(
 		// 从当前数据库的所有表生成结构
 		g.GenerateAllTable()...,

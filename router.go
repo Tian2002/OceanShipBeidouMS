@@ -12,4 +12,10 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
 	// your code ...
+	app := r.Group("/app")
+
+	receiveMessage := app.Group("/message2mis")
+	{
+		receiveMessage.POST("/station/:stationMark", handler.ReceiveMessage)
+	}
 }
