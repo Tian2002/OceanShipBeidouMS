@@ -26,6 +26,10 @@ func initRedisClient() {
 	println(redisClient.Ping(context.Background()))
 }
 
-func GetClient() *redis.Client {
-	return redisClient
+type redisRepo struct {
+	cli *redis.Client
+}
+
+func GetRepo() redisRepo {
+	return redisRepo{cli: redisClient}
 }

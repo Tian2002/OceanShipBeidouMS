@@ -1,6 +1,7 @@
 package common
 
 func init() {
+	ErrMap = make(map[int]string)
 	ErrMap[ParamError] = "param error"
 }
 

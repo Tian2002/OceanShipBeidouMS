@@ -9,3 +9,7 @@ const (
 	MessageTypeGroup  = "group"
 	MessageTypePerson = "person"
 )
+
+const UrgentCartNumber = 10
+
+const MaxShipSpeedInKnots = 30

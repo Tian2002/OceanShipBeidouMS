@@ -1,64 +1,65 @@
-version: '2.1'
+version: '2.1'  # 指定docker-compose文件使用的版本
 
-services:
-  zoo1:
-    image: confluentinc/cp-zookeeper:7.3.2
-    hostname: zoo1
-    container_name: zoo1
+services:  # 定义服务的列表
+  zoo1:  # 定义名为zoo1的服务，代表ZooKeeper的一个实例
+    image: confluentinc/cp-zookeeper:7.3.2  # 使用confluentinc提供的ZooKeeper镜像
+    hostname: zoo1  # 设置容器的hostname
+    container_name: zoo1  # 设置容器的名称
     ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_SERVERS: zoo1:2888:3888
+      - "2181:2181"  # 映射端口，将容器的2181端口映射到宿主机的2181端口
+    environment:  # 设置环境变量
+      ZOOKEEPER_CLIENT_PORT: 2181  # ZooKeeper客户端连接端口
+      ZOOKEEPER_SERVER_ID: 1  # ZooKeeper服务器的ID
+      ZOOKEEPER_SERVERS: zoo1:2888:3888  # 指定ZooKeeper服务器列表，用于集群模式
 
-  kafka1:
-    image: confluentinc/cp-kafka:7.3.2
-    hostname: kafka1
-    container_name: kafka1
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-      - "9999:9999"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092,DOCKER://host.docker.internal:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
-      KAFKA_BROKER_ID: 1
-      KAFKA_LOG4J_LOGGERS: "kafkaRepo.controller=INFO,kafkaRepo.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_JMX_PORT: 9999
-      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
-      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer # kafkaRepo.security.authorizer.AclAuthorizer
-      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
-    depends_on:
+  kafka1:  # 定义名为kafka1的服务，代表Kafka的一个代理节点
+    image: confluentinc/cp-kafka:7.3.2  # 使用confluentinc提供的Kafka镜像
+    hostname: kafka1  # 设置容器的hostname
+    container_name: kafka1  # 设置容器的名称
+    ports:  # 映射端口
+      - "9092:9092"  # Kafka客户端连接端口
+      - "29092:29092"  # Kafka内部通信端口
+      - "9999:9999"  # JMX监控端口
+    environment:  # 设置环境变量
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092,DOCKER://host.docker.internal:29092  # 定义Kafka的监听器
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT  # 定义不同监听器的安全协议
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL  # Kafka代理节点之间的通信监听器名称
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"  # 指定ZooKeeper服务的连接地址
+      KAFKA_BROKER_ID: 1  # Kafka代理节点的ID
+      KAFKA_LOG4J_LOGGERS: "kafkaRepo.controller=INFO,kafkaRepo.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"  # 日志级别配置
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Kafka偏移量主题的副本因子
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1  # Kafka事务状态日志的副本因子
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1  # Kafka事务状态日志最小ISR（In-Sync Replicas）大小
+      KAFKA_JMX_PORT: 9999  # Kafka JMX端口
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}  # Kafka JMX主机名
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer  # Kafka授权类
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"  # 如果没有找到ACL，则允许所有人访问
+    depends_on:  # 指定依赖服务，确保zoo1服务先启动
       - zoo1
-  kafka-ui:
-    container_name: kafkaRepo-ui
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - 8080:8080
-    depends_on:
+
+  kafka-ui:  # 定义名为kafka-ui的服务，提供Kafka的Web UI界面
+    container_name: kafkaRepo-ui  # 设置容器的名称
+    image: provectuslabs/kafka-ui:latest  # 使用provectuslabs提供的Kafka UI镜像
+    ports:  # 映射端口
+      - 8080:8080  # 将容器的8080端口映射到宿主机的8080端口
+    depends_on:  # 指定依赖服务，确保kafka1服务先启动
       - kafka1
-    environment:
-      DYNAMIC_CONFIG_ENABLED: "TRUE"
+    environment:  # 设置环境变量
+      DYNAMIC_CONFIG_ENABLED: "TRUE"  # 启用动态配置
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: osdbms
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+  mysql:  # 定义名为mysql的服务，提供MySQL数据库服务
+    image: mysql:8.0  # 使用官方MySQL镜像
+    container_name: mysql  # 设置容器的名称
+    ports:  # 映射端口
+      - "3306:3306"  # 将容器的3306端口映射到宿主机的3306端口
+    environment:  # 设置环境变量
+      MYSQL_ROOT_PASSWORD: 123456  # 设置MySQL root用户的密码
+      MYSQL_DATABASE: osdbms  # 设置预创建的数据库名称
+      MYSQL_USER: user  # 设置预创建的数据库用户
+      MYSQL_PASSWORD: password  # 设置预创建的数据库用户密码
 
-  redis:
-    image: redis:6.2.6
-    container_name: redis
-    ports:
-      - "6379:6379"
+  redis:  # 定义名为redis的服务，提供Redis缓存服务
+    image: redis:6.2.6  # 使用官方Redis镜像
+    container_name: redis  # 设置容器的名称
+    ports:  # 映射端口
+      - "6379:6379"  # 将容器的6379端口映射到宿主机的6379端口
