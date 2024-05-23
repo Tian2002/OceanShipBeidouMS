@@ -9,7 +9,7 @@ import (
 )
 
 type KeepAlive interface {
-	KeepAlive(ctx context.Context, key string, aliveTime time.Duration, checkTime time.Duration, sleepTime time.Duration)
+	KeepListAlive(ctx context.Context, key string, aliveTime time.Duration, checkTime time.Duration, sleepTime time.Duration)
 }
 
 func (repo *redisRepo) KeepListAlive(ctx context.Context, key string, aliveTime time.Duration, checkTime time.Duration, sleepTime time.Duration) {
