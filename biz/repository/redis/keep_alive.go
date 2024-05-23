@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+type KeepAlive interface {
+	KeepAlive(ctx context.Context, key string, aliveTime time.Duration, checkTime time.Duration, sleepTime time.Duration)
+}
+
 func (repo *redisRepo) KeepListAlive(ctx context.Context, key string, aliveTime time.Duration, checkTime time.Duration, sleepTime time.Duration) {
 	for {
 		ttl, err := repo.cli.TTL(ctx, key).Result()
