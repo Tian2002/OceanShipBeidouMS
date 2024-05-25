@@ -30,6 +30,6 @@ type redisRepo struct {
 	cli *redis.Client
 }
 
-func GetRepo() redisRepo {
-	return redisRepo{cli: redisClient}
+func GetRepo() *redisRepo {
+	return &redisRepo{cli: redisClient}
 }
